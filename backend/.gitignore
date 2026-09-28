@@ -1,0 +1,17 @@
+﻿# Secrets
+.env
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Uploads (user files)
+uploads/
+
+# OS
+.DS_Store
+Thumbs.db
