@@ -1,0 +1,31 @@
+# docker-compose.yml — PostgreSQL 16 + pgvector for local development.
+# Credentials are read from a .env file in this directory — never hardcoded here.
+# Copy .env.example → .env and fill in the values before running docker compose up.
+#
+# Usage:
+#   docker compose up -d        # start the database
+#   docker compose down         # stop (data persists in the named volume)
+#   docker compose down -v      # stop AND wipe all data
+
+services:
+  db:
+    image: pgvector/pgvector:pg16      # includes pgvector extension — do not use plain postgres
+    container_name: lexbase_db
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"  # default host port 5433 avoids clash with local Postgres
+    volumes:
+      - lexbase_pgdata:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  lexbase_pgdata:

@@ -1,0 +1,66 @@
+/* index.css — global styles, design tokens, and base resets */
+
+/* Pull in Tailwind's utility classes — must be the only @import in this file.
+   Google Fonts is loaded via <link> in index.html instead of @import url() here
+   because Tailwind v4 expands this directive to ~840 lines before PostCSS runs,
+   which pushes any subsequent @import past CSS rules and triggers a PostCSS error. */
+@import "tailwindcss";
+
+/* ── Design tokens ───────────────────────────────────────────────────────────
+   CSS custom properties (variables) that define the entire colour palette.
+   Every component uses these names so changing one value updates the whole UI. */
+:root {
+  /* Page and surface background colours */
+  --color-bg-app:        #f5f3ee;
+  --color-bg-surface:    #ffffff;
+  --color-bg-secondary:  #f7f8f5;
+  --color-bg-elevated:   #eef1ee;
+
+  /* Border colours — regular and strong/prominent variant */
+  --color-border:        #d9ddd8;
+  --color-border-strong: #cfd6d1;
+
+  /* Text colours from most prominent down to disabled/placeholder */
+  --color-text-primary:   #102a43;
+  --color-text-secondary: #34495e;
+  --color-text-muted:     #667085;
+  --color-text-disabled:  #aab4ad;
+
+  /* Brand navy — used for the sidebar and primary headings */
+  --color-brand:        #0b1f33;
+  --color-brand-hover:  #183c5e;
+
+  /* Accent green — used for primary action buttons and success indicators */
+  --color-accent:       #386641;
+  --color-accent-hover: #2e5636;
+  --color-accent-bg:    #e2eee4;
+  --color-accent-text:  #386641;
+
+  /* Gold — used for highlights and focus rings */
+  --color-gold:         #c58b2a;
+  --color-gold-bg:      #fff2d8;
+  --color-gold-text:    #885b12;
+
+  /* Semantic status colours — success, warning, error, and info */
+  --color-success:      #386641;
+  --color-success-bg:   #e2eee4;
+  --color-warning:      #885b12;
+  --color-warning-bg:   #fff2d8;
+  --color-error:        #8c3b45;
+  --color-error-bg:     #f4e9ea;
+  --color-info:         #274c77;
+  --color-info-bg:      #e8edf1;
+}
+
+/* Smooth scrolling when navigating to anchor links on the page */
+html { scroll-behavior: smooth; }
+
+/* Apply the brand font and default background/text colour to every page */
+body {
+  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
+}
+
+/* Make all elements use border-box sizing so padding never breaks layouts */
+* { box-sizing: border-box; }

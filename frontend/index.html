@@ -1,0 +1,27 @@
+<!doctype html>
+<!-- Declares this document follows the HTML5 standard. -->
+<html lang="en">
+  <!-- lang="en" helps screen readers and search engines identify the language. -->
+  <head>
+    <!-- UTF-8 encoding supports all Unicode characters without mojibake. -->
+    <meta charset="UTF-8" />
+    <!-- SVG favicon shown in the browser tab and bookmarks. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Prevents mobile browsers from zooming out to fit a desktop-sized layout. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Page title shown in the browser tab bar. -->
+    <title>LexBase</title>
+    <!-- Google Fonts: DM Sans — loaded here as a <link> so PostCSS never sees it.
+         @import url() inside CSS breaks Tailwind v4 (it expands @import "tailwindcss"
+         to ~840 lines first, pushing the Google Fonts import past CSS rules). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- React mounts the entire single-page application into this div. -->
+    <div id="root"></div>
+    <!-- Entry point module; Vite resolves and bundles this at build time. -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
