@@ -1,6 +1,6 @@
 // AuthContext.tsx — auth state, AuthProvider, and useAuth hook.
 
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import type { TokenPayload, UserRole } from '../types/auth'
@@ -55,25 +55,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return token ? decodeUser(token, mustChangePw) : null
   })
 
+  // initialising is only true when there IS a refresh token to try — a brand-new
+  // visitor has no token at all, so we start false and never show a loading screen.
   const [initialising, setInitialising] = useState(() => {
-    const token = localStorage.getItem('access_token')
+    const accessToken  = localStorage.getItem('access_token')
+    const refreshToken = localStorage.getItem('refresh_token')
     const mustChangePw = localStorage.getItem('must_change_pw') === 'true'
-    const validToken = token ? decodeUser(token, mustChangePw) : null
-    // If we already have a valid token there is nothing async to do
-    return validToken === null
+    const validAccess  = accessToken ? decodeUser(accessToken, mustChangePw) : null
+    // Only need async init if access token is expired but refresh token exists
+    return validAccess === null && refreshToken !== null
   })
 
   useEffect(() => {
-    // If a valid access token was restored synchronously, we are done
+    // Nothing to do — either already resolved or no refresh token to try
     if (!initialising) return
 
-    let cancelled = false
+    cancelledRef.current = false
 
     async function tryRefresh() {
       const refreshToken = localStorage.getItem('refresh_token')
       const mustChangePw = localStorage.getItem('must_change_pw') === 'true'
 
-      if (refreshToken) {
+      if (refreshToken && import.meta.env.VITE_API_BASE_URL) {
         try {
           const res = await fetch(
             `${import.meta.env.VITE_API_BASE_URL}/auth/refresh`,
@@ -83,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               body: JSON.stringify({ refresh_token: refreshToken }),
             },
           )
-          if (cancelled) return
+          if (cancelledRef.current) return
           if (res.ok) {
             const data = await res.json()
             localStorage.setItem('access_token', data.access_token)
@@ -93,24 +96,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             clearStorage()
           }
         } catch {
-          if (!cancelled) clearStorage()
+          if (!cancelledRef.current) clearStorage()
         }
       } else {
         clearStorage()
       }
 
-      if (!cancelled) setInitialising(false)
+      if (!cancelledRef.current) setInitialising(false)
     }
 
     tryRefresh()
-    return () => { cancelled = true }
+    return () => { cancelledRef.current = true }
   }, [initialising])
 
+  // cancelledRef lets login() cancel any in-flight refresh so it can't
+  // wipe the freshly-logged-in user after login() already set the state.
+  const cancelledRef = useRef(false)
+
   function login(accessToken: string, refreshToken: string, mustChangePw = false) {
+    // Cancel any background refresh that is still in-flight
+    cancelledRef.current = true
     localStorage.setItem('access_token', accessToken)
     localStorage.setItem('refresh_token', refreshToken)
     localStorage.setItem('must_change_pw', String(mustChangePw))
     setUser(decodeUser(accessToken, mustChangePw))
+    // Mark initialisation as done so ProtectedRoute renders immediately
+    setInitialising(false)
   }
 
   function logout() {

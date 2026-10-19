@@ -56,8 +56,8 @@ export default function ProtectedRoute({ children, roles }: Props) {
   // the user never sees a blank white page during this window.
   if (initialising) return <LoadingScreen />
 
-  // No user in state means the session is missing — send them to login
-  if (!user) return <Navigate to="/login" replace />
+  // No user in state — send to login if backend is configured, else welcome page
+  if (!user) return <Navigate to={import.meta.env.VITE_API_BASE_URL ? '/login' : '/'} replace />
 
   // A roles list was provided and the user's role is not in it — deny access
   if (roles && !roles.includes(user.role)) {
