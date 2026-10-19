@@ -5,7 +5,11 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-const GITHUB_URL = 'https://github.com/marehman-exe/Lexbase'
+const GITHUB_URL  = 'https://github.com/marehman-exe/Lexbase'
+// Max content width — applied consistently to every section container
+const MAX_W       = '920px'
+// Consistent horizontal page padding — applied to every section
+const PX          = '1.5rem'
 
 // ── Icons (same stroke style as Sidebar.tsx) ─────────────────────────────────
 const Ico = {
@@ -145,28 +149,8 @@ function Tag({ children, color = C.accent, bg = C.accentBg }: { children: React.
   )
 }
 
-function BeatBadge({ n, label, active }: { n: string; label: string; active: boolean }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-      <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: '0.7rem', fontWeight: 700,
-                     color: active ? C.accent : C.textDis,
-                     backgroundColor: active ? C.accentBg : C.bgSec,
-                     width: 26, height: 26, borderRadius: '50%',
-                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                     transition: 'all 0.2s', flexShrink: 0 }}>
-        {n}
-      </span>
-      <span style={{ fontSize: '0.8rem', fontWeight: active ? 600 : 400,
-                     color: active ? C.text : C.textMut, transition: 'color 0.2s' }}>
-        {label}
-      </span>
-    </div>
-  )
-}
-
-// ── Product UI preview (pixel-accurate to ResearchPage palette) ───────────────
-function ProductPreview({ compact = false }: { compact?: boolean }) {
-  const minH = compact ? 260 : 310
+// ── Product UI preview ────────────────────────────────────────────────────────
+function ProductPreview() {
   return (
     <div style={{ border: `1px solid ${C.border}`, borderRadius: '0.875rem',
                   overflow: 'hidden', boxShadow: '0 4px 24px rgba(16,42,67,0.09)' }}>
@@ -180,7 +164,7 @@ function ProductPreview({ compact = false }: { compact?: boolean }) {
         <span style={{ marginLeft: '0.625rem', color: C.n94, fontSize: '0.72rem' }}>LexBase · Legal Research</span>
       </div>
       {/* Shell */}
-      <div style={{ display: 'flex', backgroundColor: C.bg, minHeight: minH }}>
+      <div style={{ display: 'flex', backgroundColor: C.bg }}>
         {/* Mini sidebar */}
         <div style={{ backgroundColor: C.brand, width: 46, display: 'flex', flexDirection: 'column',
                       alignItems: 'center', padding: '0.875rem 0', gap: '1.125rem', flexShrink: 0 }}>
@@ -212,7 +196,7 @@ function ProductPreview({ compact = false }: { compact?: boolean }) {
           {[
             { rank: '01', rBg: C.accentBg, rC: C.accent, score: 82, page: 4,
               text: 'The petition is dismissed — the applicant failed to demonstrate sufficient cause under Section 22…' },
-            { rank: '02', rBg: C.infoBg, rC: C.info, score: 74, page: 7,
+            { rank: '02', rBg: C.infoBg,   rC: C.info,   score: 74, page: 7,
               text: 'The court finds no merit in the grounds raised. No violation of natural justice was shown…' },
           ].map(({ rank, rBg, rC, score, page, text }) => (
             <div key={rank} style={{ backgroundColor: C.bgSurf, border: `1px solid ${C.border}`,
@@ -234,7 +218,7 @@ function ProductPreview({ compact = false }: { compact?: boolean }) {
           {/* Summarise strip */}
           <div style={{ backgroundColor: C.bgElev, border: `1px solid ${C.accentBg}`, borderRadius: '0.575rem',
                         padding: '0.5rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <span style={{ fontSize: '0.68rem', color: C.accent, fontWeight: 600 }}>✦ Summarise with Sources</span>
+            <span style={{ fontSize: '0.68rem', color: C.accent, fontWeight: 600 }}>Summarise with Sources</span>
             <span style={{ fontSize: '0.63rem', color: C.textMut, marginLeft: 'auto' }}>Groq · inline citations</span>
           </div>
         </div>
@@ -268,17 +252,17 @@ function CitationPreview() {
                     border: `1px solid ${C.border}`, borderRadius: '0.5rem' }}>
         <p style={{ fontSize: '0.65rem', fontWeight: 700, color: C.textMut, textTransform: 'uppercase',
                     margin: '0 0 0.3rem' }}>Sources</p>
-        {['[1] CR.P_521_2024.pdf, p.4', '[2] CR.P_521_2024.pdf, p.7'].map(s => (
-          <p key={s} style={{ fontSize: '0.72rem', color: C.accent, margin: '0 0 0.15rem',
+        {['[1] CR.P_521_2024.pdf, p.4', '[2] CR.P_521_2024.pdf, p.7'].map(src => (
+          <p key={src} style={{ fontSize: '0.72rem', color: C.accent, margin: '0 0 0.15rem',
                               textDecoration: 'underline', textDecorationColor: 'transparent',
-                              cursor: 'pointer' }}>{s}</p>
+                              cursor: 'pointer' }}>{src}</p>
         ))}
       </div>
     </div>
   )
 }
 
-// ── Context visual (slide 02) ─────────────────────────────────────────────────
+// ── Context visual (beat 02) ──────────────────────────────────────────────────
 function ContextPreview() {
   return (
     <div style={{ backgroundColor: C.bgSurf, borderRadius: '0.875rem',
@@ -286,8 +270,8 @@ function ContextPreview() {
       <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.textMut, textTransform: 'uppercase',
                   letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Finding a passage vs. finding an answer</p>
       {[
-        { label: 'Ctrl+F result', q: '"grounds for dismissal"', hit: '0 exact matches', ok: false },
-        { label: 'LexBase result', q: 'What are the grounds for dismissal?', hit: '3 relevant passages', ok: true },
+        { label: 'Ctrl+F result', q: '"grounds for dismissal"',        hit: '0 exact matches',    ok: false },
+        { label: 'LexBase result', q: 'What are the grounds for dismissal?', hit: '3 relevant passages', ok: true  },
       ].map(({ label, q, hit, ok }) => (
         <div key={label} style={{ padding: '0.75rem', borderRadius: '0.5rem', marginBottom: '0.5rem',
                                   backgroundColor: ok ? C.bgElev : C.bgSec,
@@ -298,9 +282,82 @@ function ContextPreview() {
           <p style={{ fontSize: '0.75rem', color: C.textSec, margin: '0 0 0.3rem',
                       fontStyle: 'italic' }}>"{q}"</p>
           <p style={{ fontSize: '0.72rem', fontWeight: 600, margin: 0,
-                      color: ok ? C.accent : C.error }}>{ok ? '✓' : '✗'} {hit}</p>
+                      color: ok ? C.accent : C.error }}>{ok ? 'Pass' : 'No match'} — {hit}</p>
         </div>
       ))}
+    </div>
+  )
+}
+
+// ── Document queue visual (beat 01) ──────────────────────────────────────────
+function DocumentQueuePreview() {
+  return (
+    <div style={{ backgroundColor: C.bgSurf, borderRadius: '0.875rem',
+                  border: `1px solid ${C.border}`, padding: '1rem' }}>
+      <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.textMut, textTransform: 'uppercase',
+                  letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Manual document search</p>
+      {[
+        { name: 'CR.P_521_2024.pdf',   pages: 42, s: 'Searching',  a: true  },
+        { name: 'Order_April_2024.pdf', pages: 18, s: 'Queued',     a: false },
+        { name: 'Petition_2023.pdf',    pages: 67, s: 'Queued',     a: false },
+      ].map(({ name, pages, s, a }) => (
+        <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem',
+                                 padding: '0.5rem 0.625rem', borderRadius: '0.45rem',
+                                 marginBottom: '0.3rem',
+                                 backgroundColor: a ? C.bgElev : 'transparent',
+                                 border: `1px solid ${a ? '#c6ddc9' : C.border}` }}>
+          <span style={{ color: a ? C.accent : C.textDis, flexShrink: 0 }}><Ico.file s={14} /></span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: '0.72rem', fontWeight: 600, color: C.text, margin: 0,
+                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</p>
+            <p style={{ fontSize: '0.62rem', color: C.textMut, margin: 0 }}>{pages} pages</p>
+          </div>
+          <Tag color={a ? C.accent : C.textDis} bg={a ? C.accentBg : C.bgSec}>{s}</Tag>
+        </div>
+      ))}
+      <div style={{ marginTop: '0.625rem', padding: '0.5rem 0.625rem', backgroundColor: C.goldBg,
+                    borderRadius: '0.45rem', border: `1px solid #f0d9a8` }}>
+        <p style={{ fontSize: '0.68rem', color: C.goldText, margin: 0 }}>
+          Searching 3 documents manually — estimated 25–40 minutes
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// ── GitHub repo card visual (beat 05) ────────────────────────────────────────
+function RepoCard({ onTry }: { onTry: () => void }) {
+  return (
+    <div style={{ backgroundColor: C.brand, borderRadius: '0.875rem', padding: '1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1rem' }}>
+        <div style={{ backgroundColor: C.gold, color: C.brand, width: 34, height: 34,
+                      borderRadius: '0.55rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Ico.scale s={17} />
+        </div>
+        <div>
+          <p style={{ fontWeight: 700, fontSize: '0.85rem', color: '#fff', margin: 0 }}>marehman-exe / Lexbase</p>
+          <p style={{ color: C.n64, fontSize: '0.72rem', margin: 0 }}>github.com · MIT licence</p>
+        </div>
+      </div>
+      <p style={{ fontSize: '0.78rem', color: C.n94, lineHeight: 1.65, marginBottom: '1.125rem' }}>
+        Full-stack legal document research — FastAPI · React 19 · PostgreSQL · pgvector · sentence-transformers · Groq
+      </p>
+      {[
+        { dot: C.accent, t: 'FastAPI + Python 3.12 backend'      },
+        { dot: C.info,   t: 'React 19 + TypeScript frontend'      },
+        { dot: C.gold,   t: 'Hybrid vector + keyword search'       },
+        { dot: C.error,  t: 'Groq / OpenRouter / Ollama LLM'      },
+      ].map(({ dot, t }) => (
+        <div key={t} style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.35rem' }}>
+          <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: dot,
+                         display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ fontSize: '0.75rem', color: C.n94 }}>{t}</span>
+        </div>
+      ))}
+      <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', marginTop: '1.125rem' }}>
+        <BtnPrimary onClick={onTry} size="sm">Try LexBase</BtnPrimary>
+        <BtnGhost href={GITHUB_URL} light size="sm"><Ico.github s={13} /> View source</BtnGhost>
+      </div>
     </div>
   )
 }
@@ -312,7 +369,7 @@ interface Beat {
   heading: string
   sub:     string
   body:    string
-  visual:  React.ReactNode
+  visual:  (onTry: () => void) => React.ReactNode
 }
 
 const BEATS: Beat[] = [
@@ -320,108 +377,50 @@ const BEATS: Beat[] = [
     n: '01', label: 'The problem',
     heading: 'Legal information is buried in lengthy documents.',
     sub:     'Manual searching costs time that should go to legal analysis.',
-    body:    'Finding the passage that answers a specific legal question often means opening each PDF, running a keyword search, scanning pages, and repeating — across multiple files, under time pressure. The information is there. Locating it is the friction.',
-    visual: (
-      <div style={{ backgroundColor: C.bgSurf, borderRadius: '0.875rem',
-                    border: `1px solid ${C.border}`, padding: '1rem' }}>
-        <p style={{ fontSize: '0.68rem', fontWeight: 700, color: C.textMut, textTransform: 'uppercase',
-                    letterSpacing: '0.08em', marginBottom: '0.75rem' }}>Manual document search</p>
-        {[
-          { name: 'CR.P_521_2024.pdf',   pages: 42, s: 'Searching…', a: true  },
-          { name: 'Order_April_2024.pdf', pages: 18, s: 'Queued',     a: false },
-          { name: 'Petition_2023.pdf',    pages: 67, s: 'Queued',     a: false },
-        ].map(({ name, pages, s, a }) => (
-          <div key={name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem',
-                                   padding: '0.5rem 0.625rem', borderRadius: '0.45rem',
-                                   marginBottom: '0.3rem',
-                                   backgroundColor: a ? C.bgElev : 'transparent',
-                                   border: `1px solid ${a ? '#c6ddc9' : C.border}` }}>
-            <span style={{ color: a ? C.accent : C.textDis, flexShrink: 0 }}><Ico.file s={14} /></span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: '0.72rem', fontWeight: 600, color: C.text, margin: 0,
-                          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</p>
-              <p style={{ fontSize: '0.62rem', color: C.textMut, margin: 0 }}>{pages} pages</p>
-            </div>
-            <Tag color={a ? C.accent : C.textDis} bg={a ? C.accentBg : C.bgSec}>{s}</Tag>
-          </div>
-        ))}
-        <div style={{ marginTop: '0.625rem', padding: '0.5rem 0.625rem', backgroundColor: C.goldBg,
-                      borderRadius: '0.45rem', border: `1px solid #f0d9a8` }}>
-          <p style={{ fontSize: '0.68rem', color: C.goldText, margin: 0 }}>
-            ⚠ Searching 3 documents manually — estimated 25–40 minutes
-          </p>
-        </div>
-      </div>
-    ),
+    body:    'Finding the passage that answers a specific legal question often means opening each PDF, running a keyword search, scanning pages, and repeating — across multiple files, under time pressure. The information is there. Locating it efficiently is the problem.',
+    visual: () => <DocumentQueuePreview />,
   },
   {
     n: '02', label: 'The gap',
     heading: 'Finding a passage is not the same as finding a supported answer.',
     sub:     'Keywords match words. Legal questions have meaning.',
     body:    'A Ctrl+F search finds exact text — not relevance. A question about "grounds for dismissal" may be answered by a passage that describes the reasoning without using those words. Even when a passage is found, understanding it requires context: what surrounds it, how it was used in the judgment, and whether it actually supports the question being investigated.',
-    visual: <ContextPreview />,
+    visual: () => <ContextPreview />,
   },
   {
     n: '03', label: 'The solution',
-    heading: 'LexBase helps you find relevant information and examine it at its source.',
-    sub:     'Hybrid search. Ranked results. Every answer linked back.',
-    body:    'Upload your PDF documents. Search using a question or a legal phrase. LexBase combines keyword matching with semantic similarity to surface the passages most relevant to the meaning of your query — ranked by score, with the source document and page number on every result. Open the original PDF at the exact page directly from the result card.',
-    visual: <ProductPreview compact />,
+    heading: 'LexBase finds relevant passages and links every result to its source.',
+    sub:     'Hybrid search. Ranked results. Every answer traceable.',
+    body:    'Upload PDF documents. Search using a question or a legal phrase. LexBase combines keyword matching with semantic similarity to surface the passages most relevant to the meaning of your query — ranked by score, with the source document and page number on every result. Open the original PDF at the exact page directly from the result card.',
+    visual: () => <ProductPreview />,
   },
   {
     n: '04', label: 'The proof',
     heading: 'Every answer in LexBase has a traceable source.',
     sub:     'Inline citations. Original PDF access. No unverifiable claims.',
     body:    'When you use Summarise with Sources, the AI-generated answer includes numbered inline citations. Each [N] maps to a specific retrieved passage. Nothing is asserted without a reference you can inspect. The answer is a starting point for legal judgment — not a replacement for it.',
-    visual: <CitationPreview />,
+    visual: () => <CitationPreview />,
   },
   {
     n: '05', label: 'The next step',
-    heading: 'Try LexBase with your own documents, or explore the source code.',
+    heading: 'Try LexBase with your own documents, or read the source code.',
     sub:     'Open source · MIT licence · github.com/marehman-exe/Lexbase',
     body:    'LexBase is publicly available on GitHub — the full FastAPI backend, React 19 frontend, hybrid search pipeline, and document ingestion are all in the open. Try it with your own documents by logging in, or read the implementation before committing.',
-    visual: (
-      <div style={{ backgroundColor: C.brand, borderRadius: '0.875rem', padding: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1rem' }}>
-          <div style={{ backgroundColor: C.gold, color: C.brand, width: 34, height: 34,
-                        borderRadius: '0.55rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Ico.scale s={17} />
-          </div>
-          <div>
-            <p style={{ fontWeight: 700, fontSize: '0.85rem', color: '#fff', margin: 0 }}>marehman-exe / Lexbase</p>
-            <p style={{ color: C.n64, fontSize: '0.72rem', margin: 0 }}>github.com</p>
-          </div>
-        </div>
-        <p style={{ fontSize: '0.78rem', color: C.n94, lineHeight: 1.65, marginBottom: '1.125rem' }}>
-          Full-stack legal document research — FastAPI · React 19 · PostgreSQL · pgvector · sentence-transformers · Groq
-        </p>
-        {[
-          { dot: C.accent,  t: 'FastAPI + Python 3.12 backend'      },
-          { dot: C.info,    t: 'React 19 + TypeScript frontend'      },
-          { dot: C.gold,    t: 'Hybrid vector + keyword search'       },
-          { dot: C.error,   t: 'Groq / OpenRouter / Ollama LLM'      },
-        ].map(({ dot, t }) => (
-          <div key={t} style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.35rem' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: dot,
-                           display: 'inline-block', flexShrink: 0 }} />
-            <span style={{ fontSize: '0.75rem', color: C.n94 }}>{t}</span>
-          </div>
-        ))}
-        <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', marginTop: '1.125rem' }}>
-          <BtnPrimary href={GITHUB_URL} size="sm"><Ico.github s={14} /> View on GitHub</BtnPrimary>
-        </div>
-      </div>
-    ),
+    visual: (onTry) => <RepoCard onTry={onTry} />,
   },
 ]
 
 // ── Narrative Slideshow ───────────────────────────────────────────────────────
 function NarrativeSlideshow({ onTry }: { onTry: () => void }) {
-  const [cur, setCur]           = useState(0)
-  const [prefRed, setPrefRed]   = useState(false)
-  const timerRef                = useRef<ReturnType<typeof setInterval> | null>(null)
-  const [playing, setPlaying]   = useState(false)
-  const count                   = BEATS.length
+  const [cur, setCur]         = useState(0)
+  const [prefRed, setPrefRed] = useState(false)
+  // fadingOut drives the CSS opacity transition — set to true, wait one frame, then swap slide
+  const [visible, setVisible] = useState(true)
+  const timerRef              = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [playing, setPlaying] = useState(false)
+  const count                 = BEATS.length
+  // Prevent stale callbacks during rapid navigation
+  const pendingRef            = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -431,16 +430,48 @@ function NarrativeSlideshow({ onTry }: { onTry: () => void }) {
     return () => mq.removeEventListener('change', h)
   }, [])
 
-  const go   = useCallback((i: number) => setCur(((i % count) + count) % count), [count])
+  // Navigate to a beat index with a cross-fade transition
+  const go = useCallback((i: number) => {
+    const target = ((i % count) + count) % count
+    // Clear any pending transition to prevent stale slide swaps on rapid clicks
+    if (pendingRef.current) clearTimeout(pendingRef.current)
+    if (prefRed) {
+      // No animation — swap immediately
+      setCur(target)
+      setVisible(true)
+      return
+    }
+    // Fade out, then swap, then fade in
+    setVisible(false)
+    pendingRef.current = setTimeout(() => {
+      setCur(target)
+      setVisible(true)
+      pendingRef.current = null
+    }, 180)
+  }, [count, prefRed])
+
   const prev = useCallback(() => { go(cur - 1); setPlaying(false) }, [cur, go])
   const next = useCallback(() => { go(cur + 1); setPlaying(false) }, [cur, go])
 
+  // Autoplay timer — restarted whenever playing state or prefRed changes
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current)
-    if (playing && !prefRed) timerRef.current = setInterval(() => setCur(c => (c + 1) % count), 8000)
+    if (playing && !prefRed) {
+      timerRef.current = setInterval(() => {
+        // Use functional update so the interval captures no stale `cur`
+        setCur(c => {
+          const next = (c + 1) % count
+          // Trigger the visible fade as a side effect
+          setVisible(false)
+          setTimeout(() => setVisible(true), 180)
+          return next
+        })
+      }, 8000)
+    }
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [playing, prefRed, count])
 
+  // Keyboard navigation — ArrowLeft / ArrowRight
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  prev()
@@ -450,95 +481,124 @@ function NarrativeSlideshow({ onTry }: { onTry: () => void }) {
     return () => window.removeEventListener('keydown', h)
   }, [prev, next])
 
+  // Cleanup pending timeout on unmount
+  useEffect(() => () => { if (pendingRef.current) clearTimeout(pendingRef.current) }, [])
+
   const beat = BEATS[cur]
-  const fade = prefRed ? 'none' : 'opacity 0.22s ease'
 
   return (
     <div>
-      {/* Beat progress — left sidebar on md+, top strip on mobile */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '0 2.5rem' }}
-           className="lx-slideshow-grid">
+      {/* Two-column layout: beat sidebar (left) + slide content (right) */}
+      <div className="lx-slideshow-grid"
+           style={{ display: 'grid', gap: '0 2.5rem' }}>
 
-        {/* Left beat list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0', paddingRight: '2rem',
-                      borderRight: `1px solid ${C.border}`, minWidth: 175 }}
-             className="lx-beat-sidebar">
+        {/* Left beat list — hidden on narrow mobile (replaced by dots) */}
+        <div className="lx-beat-sidebar"
+             style={{ display: 'flex', flexDirection: 'column',
+                      paddingRight: '2rem', borderRight: `1px solid ${C.border}`,
+                      minWidth: 175, gap: 0 }}>
           {BEATS.map((b, i) => (
-            <button key={i} type="button"
+            <button key={b.n} type="button"
                     onClick={() => { go(i); setPlaying(false) }}
                     aria-label={`${b.n} ${b.label}`}
                     aria-pressed={i === cur}
                     style={{ background: 'none', border: 'none', cursor: 'pointer',
-                             padding: '0.75rem 0', textAlign: 'left', fontFamily: 'inherit',
+                             padding: '0.75rem 0 0.75rem 0.875rem', textAlign: 'left',
+                             fontFamily: 'inherit',
                              borderLeft: `2px solid ${i === cur ? C.accent : 'transparent'}`,
-                             paddingLeft: '1rem', transition: 'border-color 0.2s',
-                             borderBottom: i < count - 1 ? `1px solid ${C.border}` : 'none' }}>
-              <BeatBadge n={b.n} label={b.label} active={i === cur} />
+                             borderBottom: i < count - 1 ? `1px solid ${C.border}` : 'none',
+                             transition: 'border-color 0.2s' }}>
+              {/* Beat number */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: '0.7rem', fontWeight: 700,
+                               color: i === cur ? C.accent : C.textDis,
+                               backgroundColor: i === cur ? C.accentBg : C.bgSec,
+                               width: 26, height: 26, borderRadius: '50%',
+                               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                               transition: 'all 0.2s', flexShrink: 0 }}>
+                  {b.n}
+                </span>
+                <span style={{ fontSize: '0.8rem', fontWeight: i === cur ? 600 : 400,
+                               color: i === cur ? C.text : C.textMut,
+                               transition: 'color 0.2s' }}>
+                  {b.label}
+                </span>
+              </div>
             </button>
           ))}
         </div>
 
-        {/* Slide content */}
-        <div style={{ opacity: 1, transition: fade }}>
-          {/* Beat label + heading */}
+        {/* Slide content — fades on transition */}
+        {/* min-height prevents layout shift when slides have different content heights */}
+        <div style={{ opacity: visible ? 1 : 0,
+                      transition: prefRed ? 'none' : 'opacity 0.18s ease',
+                      minHeight: 360 }}>
+          {/* Beat label */}
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent, letterSpacing: '0.1em',
                       textTransform: 'uppercase', margin: '0 0 0.625rem' }}>
             {beat.n} · {beat.label}
           </p>
-          <h3 style={{ fontSize: 'clamp(1.15rem, 2.5vw, 1.55rem)', fontWeight: 700, color: C.text,
-                       lineHeight: 1.22, letterSpacing: '-0.015em', margin: '0 0 0.375rem' }}>
+          {/* Heading */}
+          <h3 style={{ fontSize: 'clamp(1.1rem, 2.4vw, 1.45rem)', fontWeight: 700, color: C.text,
+                       lineHeight: 1.25, letterSpacing: '-0.015em', margin: '0 0 0.375rem' }}>
             {beat.heading}
           </h3>
+          {/* Sub-headline */}
           <p style={{ fontSize: '0.85rem', fontWeight: 500, color: C.accent, margin: '0 0 1rem' }}>
             {beat.sub}
           </p>
 
-          {/* Two-column: body text + visual */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                        gap: '1.75rem', alignItems: 'start' }}>
+          {/* Body text + visual — side by side on md+, stacked on mobile */}
+          <div className="lx-beat-content"
+               style={{ display: 'grid', gap: '1.75rem', alignItems: 'start' }}>
             <div>
-              <p style={{ fontSize: '0.9rem', color: C.textMut, lineHeight: 1.78, margin: 0 }}>
+              <p style={{ fontSize: '0.875rem', color: C.textMut, lineHeight: 1.78, margin: 0 }}>
                 {beat.body}
               </p>
+              {/* CTA buttons on last beat only */}
               {cur === count - 1 && (
                 <div style={{ marginTop: '1.25rem', display: 'flex', gap: '0.625rem', flexWrap: 'wrap' }}>
                   <BtnPrimary onClick={onTry} size="md">Try LexBase</BtnPrimary>
-                  <BtnGhost href={GITHUB_URL} size="md"><Ico.github s={15} /> GitHub</BtnGhost>
                 </div>
               )}
             </div>
-            <div>{beat.visual}</div>
+            <div style={{ minWidth: 0 }}>{beat.visual(onTry)}</div>
           </div>
 
-          {/* Arrow nav + dots */}
+          {/* Arrow nav + dots + counter */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem',
                         marginTop: '1.5rem', paddingTop: '1rem', borderTop: `1px solid ${C.border}` }}>
-            <button type="button" onClick={prev} aria-label="Previous"
+            <button type="button" onClick={prev} aria-label="Previous beat"
                     style={{ background: C.bgSec, border: `1px solid ${C.border}`, borderRadius: '0.45rem',
-                             padding: '0.4rem', cursor: 'pointer', display: 'flex', color: C.text, fontFamily: 'inherit' }}>
+                             padding: '0.4rem', cursor: 'pointer', display: 'flex',
+                             alignItems: 'center', color: C.text, fontFamily: 'inherit' }}>
               <Ico.chevL />
             </button>
-            <div style={{ display: 'flex', gap: '0.35rem', flex: 1, justifyContent: 'center' }}>
-              {BEATS.map((_, i) => (
-                <button key={i} type="button" onClick={() => { go(i); setPlaying(false) }}
-                        aria-label={`Slide ${i + 1}`} aria-current={i === cur ? 'true' : undefined}
+            {/* Dot indicators — always visible (important on mobile where sidebar is hidden) */}
+            <div role="tablist" aria-label="Beats" style={{ display: 'flex', gap: '0.35rem', flex: 1, justifyContent: 'center' }}>
+              {BEATS.map((b, i) => (
+                <button key={b.n} type="button" role="tab"
+                        onClick={() => { go(i); setPlaying(false) }}
+                        aria-label={`${b.n} ${b.label}`}
+                        aria-selected={i === cur}
                         style={{ width: i === cur ? 22 : 7, height: 7, borderRadius: '999px',
                                  backgroundColor: i === cur ? C.accent : C.border,
                                  border: 'none', cursor: 'pointer', padding: 0,
-                                 transition: prefRed ? 'none' : 'all 0.25s' }} />
+                                 transition: prefRed ? 'none' : 'width 0.25s, background-color 0.25s' }} />
               ))}
             </div>
-            <button type="button" onClick={next} aria-label="Next"
+            <button type="button" onClick={next} aria-label="Next beat"
                     style={{ background: C.bgSec, border: `1px solid ${C.border}`, borderRadius: '0.45rem',
-                             padding: '0.4rem', cursor: 'pointer', display: 'flex', color: C.text, fontFamily: 'inherit' }}>
+                             padding: '0.4rem', cursor: 'pointer', display: 'flex',
+                             alignItems: 'center', color: C.text, fontFamily: 'inherit' }}>
               <Ico.chevR />
             </button>
             <button type="button" onClick={() => setPlaying(p => !p)}
-                    aria-label={playing ? 'Pause' : 'Auto-advance'}
+                    aria-label={playing ? 'Pause auto-advance' : 'Start auto-advance'}
                     style={{ background: 'none', border: 'none', cursor: 'pointer',
                              fontSize: '0.72rem', color: C.textMut, fontFamily: 'inherit',
                              padding: '0.4rem 0.5rem' }}>
-              {playing ? '⏸' : '▶'}
+              {playing ? 'Pause' : 'Play'}
             </button>
             <span style={{ fontSize: '0.72rem', color: C.textMut, minWidth: '2.5rem', textAlign: 'right' }}>
               {cur + 1} / {count}
@@ -550,7 +610,8 @@ function NarrativeSlideshow({ onTry }: { onTry: () => void }) {
   )
 }
 
-// ── FAQ ───────────────────────────────────────────────────────────────────────
+// ── FAQ item ──────────────────────────────────────────────────────────────────
+// Uses CSS max-height animation — no layout jumps, no JS measurement needed.
 function FAQ({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
   return (
@@ -561,44 +622,56 @@ function FAQ({ q, a }: { q: string; a: string }) {
                        justifyContent: 'space-between', gap: '1rem',
                        fontFamily: 'inherit', textAlign: 'left' }}>
         <span style={{ fontSize: '0.9rem', fontWeight: 600, color: C.text, flex: 1 }}>{q}</span>
-        <span style={{ color: C.accent, flexShrink: 0 }}>{open ? <Ico.minus /> : <Ico.plus />}</span>
+        <span style={{ color: C.accent, flexShrink: 0, transition: 'transform 0.2s',
+                       transform: open ? 'rotate(45deg)' : 'none', display: 'flex' }}>
+          <Ico.plus />
+        </span>
       </button>
-      {open && (
+      {/* CSS max-height animation — avoids JS height measurement, prevents layout jumps */}
+      <div style={{ overflow: 'hidden',
+                    maxHeight: open ? '20rem' : 0,
+                    transition: 'max-height 0.22s ease',
+                    // Prevent hidden content from intercepting pointer/keyboard events
+                    visibility: open ? 'visible' : 'hidden' }}>
         <p style={{ fontSize: '0.85rem', color: C.textMut, lineHeight: 1.75,
                     margin: 0, paddingBottom: '0.875rem' }}>{a}</p>
-      )}
+      </div>
     </div>
   )
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function WelcomePage() {
-  const navigate               = useNavigate()
-  const { user, initialising } = useAuth()
+  const navigate                = useNavigate()
+  const { user, initialising }  = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
 
+  // Close mobile menu when viewport widens past the breakpoint
   useEffect(() => {
     const h = () => { if (window.innerWidth >= 768) setMenuOpen(false) }
     window.addEventListener('resize', h)
     return () => window.removeEventListener('resize', h)
   }, [])
 
+  // Redirect authenticated users to the dashboard
   useEffect(() => {
     if (!initialising && user) navigate('/dashboard', { replace: true })
   }, [initialising, user, navigate])
 
   const goLogin = () => navigate('/login')
-  const W = '920px'
 
   return (
     <div style={{ fontFamily: '"DM Sans", system-ui, sans-serif',
-                  backgroundColor: C.bg, color: C.text }}>
+                  backgroundColor: C.bg, color: C.text,
+                  // Prevent horizontal overflow from any child element
+                  overflowX: 'hidden' }}>
 
-      {/* ── Header ────────────────────────────────────────────────────────── */}
+      {/* ── Header ──────────────────────────────────────────────────────────── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50,
                        backgroundColor: C.brand, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div style={{ maxWidth: W, margin: '0 auto', padding: '0 1.5rem', height: 56,
+        <div style={{ maxWidth: MAX_W, margin: '0 auto', padding: `0 ${PX}`, height: 56,
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Logo */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
             <div style={{ backgroundColor: C.gold, color: C.brand, width: 32, height: 32,
                           borderRadius: '0.55rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -609,14 +682,14 @@ export default function WelcomePage() {
             </span>
           </a>
 
-          {/* Desktop nav */}
+          {/* Desktop nav — product-focused only, no personal GitHub */}
           <nav aria-label="Site navigation" className="lx-nav-desk"
                style={{ display: 'flex', alignItems: 'center', gap: '0.1rem' }}>
             {[
-              { t: 'The Problem',  h: '#narrative' },
-              { t: 'How It Works', h: '#how'        },
-              { t: 'Features',     h: '#features'   },
+              { t: 'How It Works', h: '#how'       },
+              { t: 'Features',     h: '#features'  },
               { t: 'Open Source',  h: '#oss'        },
+              { t: 'FAQ',          h: '#faq'        },
             ].map(({ t, h }) => (
               <a key={t} href={h}
                  style={{ color: C.n94, fontSize: '0.83rem', fontWeight: 500,
@@ -627,15 +700,6 @@ export default function WelcomePage() {
                 {t}
               </a>
             ))}
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
-               style={{ color: C.n94, fontSize: '0.83rem', fontWeight: 500,
-                        padding: '0.375rem 0.65rem', borderRadius: '0.45rem',
-                        textDecoration: 'none', display: 'flex', alignItems: 'center',
-                        gap: '0.35rem', transition: 'color 0.15s' }}
-               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#fff'}
-               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = C.n94}>
-              <Ico.github s={14} /> GitHub
-            </a>
             <button type="button" onClick={goLogin}
                     style={{ marginLeft: '0.375rem', backgroundColor: C.accent, color: '#fff',
                              border: 'none', borderRadius: '0.55rem', padding: '0.42rem 0.95rem',
@@ -657,18 +721,18 @@ export default function WelcomePage() {
           </button>
         </div>
 
+        {/* Mobile drawer */}
         {menuOpen && (
           <div style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
-                        padding: '1rem 1.5rem 1.5rem' }}>
+                        padding: `1rem ${PX} 1.5rem` }}>
             {[
-              { t: 'The Problem', h: '#narrative', ext: false },
-              { t: 'How It Works', h: '#how',       ext: false },
-              { t: 'Features',    h: '#features',   ext: false },
-              { t: 'Open Source', h: '#oss',         ext: false },
-              { t: 'GitHub',      h: GITHUB_URL,     ext: true  },
-            ].map(({ t, h, ext }) => (
-              <a key={t} href={h} target={ext ? '_blank' : undefined}
-                 rel={ext ? 'noopener noreferrer' : undefined}
+              { t: 'How It Works', h: '#how'      },
+              { t: 'Features',     h: '#features' },
+              { t: 'Open Source',  h: '#oss'       },
+              { t: 'FAQ',          h: '#faq'       },
+            ].map(({ t, h }) => (
+              <a key={t} href={h}
+                 // Close drawer when the user taps a nav link
                  onClick={() => setMenuOpen(false)}
                  style={{ display: 'block', color: C.n94, padding: '0.7rem 0',
                           borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -687,12 +751,12 @@ export default function WelcomePage() {
         )}
       </header>
 
-      {/* ── HERO — answers "what + why" without requiring any clicking ─────── */}
-      <section style={{ backgroundColor: C.bg, padding: '4.5rem 1.5rem 3rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto',
-                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      {/* ── HERO ────────────────────────────────────────────────────────────── */}
+      <section style={{ backgroundColor: C.bg, padding: `4.5rem ${PX} 3rem` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto',
+                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '3rem', alignItems: 'center' }}>
-          {/* Left: value prop */}
+          {/* Left: value proposition */}
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
                           backgroundColor: C.accentBg, color: C.accent, borderRadius: '999px',
@@ -717,7 +781,7 @@ export default function WelcomePage() {
 
             <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
               <BtnPrimary onClick={goLogin} size="lg">Try LexBase</BtnPrimary>
-              <BtnGhost href={GITHUB_URL} size="lg"><Ico.github s={16} /> Explore on GitHub</BtnGhost>
+              <BtnGhost href={`#narrative`} size="lg">See how it works</BtnGhost>
             </div>
 
             <p style={{ fontSize: '0.78rem', color: C.textDis }}>
@@ -725,7 +789,7 @@ export default function WelcomePage() {
             </p>
           </div>
 
-          {/* Right: product preview — visible immediately, no interaction needed */}
+          {/* Right: live product preview */}
           <div>
             <ProductPreview />
             <p style={{ fontSize: '0.72rem', color: C.textDis, marginTop: '0.625rem', textAlign: 'center' }}>
@@ -737,22 +801,21 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── NARRATIVE SLIDESHOW — 5-beat story ────────────────────────────── */}
-      <section id="narrative" style={{ backgroundColor: C.bgSurf, padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto' }}>
-          {/* Section intro — visible before any slide interaction */}
+      {/* ── NARRATIVE SLIDESHOW ─────────────────────────────────────────────── */}
+      <section id="narrative" style={{ backgroundColor: C.bgSurf, padding: `5rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             Why LexBase was built
           </p>
           <h2 style={{ fontSize: 'clamp(1.35rem, 3vw, 1.9rem)', fontWeight: 700, color: C.text,
                        lineHeight: 1.22, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
-            Not just what the product is — why a legal professional should care.
+            The problem, the gap, and the solution.
           </h2>
           <p style={{ fontSize: '0.92rem', color: C.textMut, lineHeight: 1.75,
-                      maxWidth: 580, marginBottom: '2.5rem' }}>
-            The five steps below walk through the problem, the gap, the solution, the evidence,
-            and the next step. Use the sidebar or arrow keys to navigate at your own pace.
+                      maxWidth: 560, marginBottom: '2.5rem' }}>
+            Five steps that explain why legal document search is harder than it looks,
+            and how LexBase approaches it. Use the sidebar or arrow keys to move at your own pace.
           </p>
 
           <NarrativeSlideshow onTry={goLogin} />
@@ -761,9 +824,9 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── HOW IT WORKS ──────────────────────────────────────────────────── */}
-      <section id="how" style={{ backgroundColor: C.bg, padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto' }}>
+      {/* ── HOW IT WORKS ────────────────────────────────────────────────────── */}
+      <section id="how" style={{ backgroundColor: C.bg, padding: `5rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             The workflow
@@ -805,19 +868,19 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── FEATURES ──────────────────────────────────────────────────────── */}
-      <section id="features" style={{ backgroundColor: C.bgSurf, padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto' }}>
+      {/* ── FEATURES ────────────────────────────────────────────────────────── */}
+      <section id="features" style={{ backgroundColor: C.bgSurf, padding: `5rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             Capabilities
           </p>
           <h2 style={{ fontSize: 'clamp(1.35rem, 3vw, 1.9rem)', fontWeight: 700, color: C.text,
                        lineHeight: 1.22, letterSpacing: '-0.02em', marginBottom: '2.25rem' }}>
-            What LexBase can do today.
+            What LexBase does today.
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(255px, 1fr))', gap: '0.875rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.875rem' }}>
             {[
               { icon: <Ico.file s={17} />, title: 'PDF ingestion',
                 desc: 'Upload PDFs up to 25 MB, max 10 per firm. Text extracted page-by-page using PyMuPDF. Scanned (image-only) PDFs are not supported.',
@@ -832,7 +895,7 @@ export default function WelcomePage() {
                 desc: 'Grounded AI summary via Groq. Every factual claim includes an inline [N] citation. Uncited answers are suppressed. Requires a Groq API key.',
                 tag: 'Lawyer + Associate' },
               { icon: <Ico.users s={17} />, title: 'Role-based access',
-                desc: "Lawyer: manages firm, uploads, manages team. Associate: search + generate. Paralegal: search + view. Each firm's data is isolated.",
+                desc: "Lawyer: manages firm, uploads, manages team. Associate: search and generate. Paralegal: search and view. Each firm's documents are isolated.",
                 tag: null },
               { icon: <Ico.file s={17} />, title: 'Research history',
                 desc: 'Every search session saved for 7 days — query, passage results, and AI answer. Return to a previous session without re-running the search.',
@@ -856,9 +919,9 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── TRUST ─────────────────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: C.bg, padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto' }}>
+      {/* ── TRUST disclaimer ────────────────────────────────────────────────── */}
+      <section style={{ backgroundColor: C.bg, padding: `5rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <div style={{ backgroundColor: C.bgSurf, border: `1px solid ${C.border}`,
                         borderRadius: '1rem', padding: '2.25rem' }}>
             <div style={{ backgroundColor: C.accentBg, color: C.accent, width: 40, height: 40,
@@ -873,7 +936,7 @@ export default function WelcomePage() {
             <p style={{ fontSize: '0.88rem', color: C.textMut, lineHeight: 1.78,
                         maxWidth: 600, marginBottom: '1.125rem' }}>
               LexBase does not generate answers from general knowledge. When you use Summarise with Sources,
-              the response is grounded entirely in passages retrieved from your uploaded documents.
+              the response is grounded in passages retrieved from your uploaded documents.
               Every factual claim carries an inline [N] citation. The original PDF is accessible at the
               exact source page for independent verification.
             </p>
@@ -891,10 +954,10 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── OPEN SOURCE ───────────────────────────────────────────────────── */}
-      <section id="oss" style={{ backgroundColor: C.bgSurf, padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto',
-                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      {/* ── OPEN SOURCE ─────────────────────────────────────────────────────── */}
+      <section id="oss" style={{ backgroundColor: C.bgSurf, padding: `5rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto',
+                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '2.5rem', alignItems: 'center' }}>
           <div>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
@@ -903,7 +966,7 @@ export default function WelcomePage() {
             </p>
             <h2 style={{ fontSize: 'clamp(1.35rem, 3vw, 1.9rem)', fontWeight: 700, color: C.text,
                          lineHeight: 1.22, letterSpacing: '-0.02em', marginBottom: '1rem' }}>
-              Open source, available for inspection.
+              Read the implementation. Run it yourself.
             </h2>
             <p style={{ fontSize: '0.88rem', color: C.textMut, lineHeight: 1.78, marginBottom: '1.375rem' }}>
               The full LexBase codebase is on GitHub — FastAPI backend, React 19 frontend,
@@ -917,6 +980,7 @@ export default function WelcomePage() {
             </div>
           </div>
 
+          {/* Repo card — dark bg */}
           <div style={{ backgroundColor: C.brand, borderRadius: '1rem', padding: '1.625rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1rem' }}>
               <div style={{ backgroundColor: C.gold, color: C.brand, width: 34, height: 34,
@@ -946,10 +1010,10 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── FAQ ───────────────────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: C.bg, padding: '5rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto',
-                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+      {/* ── FAQ ─────────────────────────────────────────────────────────────── */}
+      <section id="faq" style={{ backgroundColor: C.bg, padding: `5rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto',
+                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '3rem', alignItems: 'start' }}>
           <div>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
@@ -992,8 +1056,8 @@ export default function WelcomePage() {
 
       <Divider />
 
-      {/* ── FINAL CTA ─────────────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: C.brand, padding: '5.5rem 1.5rem' }}>
+      {/* ── FINAL CTA ───────────────────────────────────────────────────────── */}
+      <section style={{ backgroundColor: C.brand, padding: `5.5rem ${PX}` }}>
         <div style={{ maxWidth: 660, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.2rem)', fontWeight: 700, color: '#fff',
                        lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: '1rem' }}>
@@ -1010,11 +1074,12 @@ export default function WelcomePage() {
         </div>
       </section>
 
-      {/* ── Footer ────────────────────────────────────────────────────────── */}
+      {/* ── Footer — personal credits live here only ────────────────────────── */}
       <footer style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
-                       padding: '1.75rem 1.5rem' }}>
-        <div style={{ maxWidth: W, margin: '0 auto', display: 'flex', flexWrap: 'wrap',
+                       padding: `1.75rem ${PX}` }}>
+        <div style={{ maxWidth: MAX_W, margin: '0 auto', display: 'flex', flexWrap: 'wrap',
                       alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+          {/* Brand */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
             <div style={{ backgroundColor: C.gold, color: C.brand, width: 26, height: 26,
                           borderRadius: '0.45rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1023,6 +1088,7 @@ export default function WelcomePage() {
             <span style={{ color: '#fff', fontWeight: 600, fontSize: '0.85rem' }}>LexBase</span>
             <span style={{ color: C.n64, fontSize: '0.78rem' }}>· Legal document research</span>
           </div>
+          {/* Project links */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.375rem', flexWrap: 'wrap' }}>
             {[
               { t: 'GitHub',        h: GITHUB_URL },
@@ -1037,28 +1103,55 @@ export default function WelcomePage() {
               </a>
             ))}
           </div>
+          {/* Author credit — personal reference at the very bottom, footer only */}
           <p style={{ color: C.n64, fontSize: '0.76rem', margin: 0 }}>
-            MIT licence · © 2026 marehman-exe
+            MIT licence · Built by{' '}
+            <a href="https://github.com/marehman-exe" target="_blank" rel="noopener noreferrer"
+               style={{ color: C.n64, textDecoration: 'none' }}
+               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = C.n94}
+               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = C.n64}>
+              marehman-exe
+            </a>
           </p>
         </div>
       </footer>
 
+      {/* ── Global responsive styles ─────────────────────────────────────────── */}
       <style>{`
+        /* Desktop nav / mobile burger */
         .lx-nav-desk { display: flex !important; }
         .lx-nav-mob  { display: none  !important; }
-        .lx-slideshow-grid   { grid-template-columns: auto 1fr; }
-        .lx-beat-sidebar     { display: flex !important; }
+
+        /* Slideshow: beat sidebar left + content right on md+ */
+        .lx-slideshow-grid { grid-template-columns: 190px 1fr; }
+        .lx-beat-sidebar   { display: flex !important; }
+
+        /* Slide body: body text left + visual right on md+ */
+        .lx-beat-content { grid-template-columns: 1fr 1fr; }
+
         @media (max-width: 767px) {
           .lx-nav-desk { display: none  !important; }
           .lx-nav-mob  { display: flex  !important; }
         }
+
+        /* On narrow screens collapse slideshow to single column,
+           hide the beat sidebar (dots+arrows provide navigation) */
         @media (max-width: 639px) {
-          .lx-slideshow-grid  { grid-template-columns: 1fr !important; }
-          .lx-beat-sidebar    { display: none !important; }
+          .lx-slideshow-grid { grid-template-columns: 1fr !important; }
+          .lx-beat-sidebar   { display: none !important; }
+          .lx-beat-content   { grid-template-columns: 1fr !important; }
         }
+
+        /* Focus ring — consistent across all interactive elements */
         button:focus-visible, a:focus-visible {
-          outline: 2px solid #386641 !important; outline-offset: 2px;
+          outline: 2px solid #386641 !important;
+          outline-offset: 2px;
         }
+
+        /* Hidden slideshow content must not receive focus */
+        .lx-beat-sidebar button[aria-pressed="false"] { }
+
+        /* Honour reduced-motion: strip all transitions and animations */
         @media (prefers-reduced-motion: reduce) {
           * { transition: none !important; animation: none !important; }
         }
