@@ -6,7 +6,7 @@
 // useState manages the form field values and UI loading/error state
 import { useState } from 'react'
 // useNavigate lets us redirect the user to the dashboard after login
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 // useAuth gives us the login() helper that stores the user in context
 import { useAuth } from '../context/AuthContext'
 // The pre-configured axios instance that points at the backend
@@ -16,6 +16,9 @@ import type { TokenResponse } from '../types/auth'
 
 // Full-page login form component — no auth required to render this
 export default function LoginPage() {
+  // If no backend is configured (demo / welcome-page-only deploy),
+  // redirect straight back to the welcome page instead of showing a broken form.
+  if (!import.meta.env.VITE_API_BASE_URL) return <Navigate to="/" replace />
   // Pull the login helper out of the auth context
   const { login }  = useAuth()
   // Router hook used to redirect to /dashboard after successful login
@@ -25,6 +28,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error,    setError]    = useState('')
   const [loading,  setLoading]  = useState(false)
+  // Toggles the password field between hidden dots and visible plain text
+  const [showPw,   setShowPw]   = useState(false)
 
   // Called when the user submits the login form
   // Prevents the default browser form submission and calls the API
@@ -107,28 +112,55 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password input field with the same gold focus ring behaviour */}
+            {/* Password input field with show/hide toggle eye button */}
             <div>
               <label className="block text-sm font-semibold mb-1.5" style={{ color: '#102a43' }}>
                 Password
               </label>
-              <input
-                type="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full rounded-xl border py-3 px-4 text-sm focus:outline-none"
-                style={{ borderColor: '#cfd6d1', backgroundColor: '#fbfcfa', color: '#102a43' }}
-                onFocus={e => {
-                  e.currentTarget.style.boxShadow = '0 0 0 2px #c58b2a'
-                  e.currentTarget.style.borderColor = '#c58b2a'
-                }}
-                onBlur={e => {
-                  e.currentTarget.style.boxShadow = 'none'
-                  e.currentTarget.style.borderColor = '#cfd6d1'
-                }}
-              />
+              <div className="relative">
+                <input
+                  type={showPw ? 'text' : 'password'}
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="w-full rounded-xl border py-3 pl-4 pr-11 text-sm focus:outline-none"
+                  style={{ borderColor: '#cfd6d1', backgroundColor: '#fbfcfa', color: '#102a43' }}
+                  onFocus={e => {
+                    e.currentTarget.style.boxShadow = '0 0 0 2px #c58b2a'
+                    e.currentTarget.style.borderColor = '#c58b2a'
+                  }}
+                  onBlur={e => {
+                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.borderColor = '#cfd6d1'
+                  }}
+                />
+                {/* Eye toggle button — sits inside the input on the right */}
+                <button
+                  type="button"
+                  onClick={() => setShowPw(v => !v)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600"
+                  tabIndex={-1}
+                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                >
+                  {showPw ? (
+                    // Eye-off icon — shown when password is visible (click to hide)
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    // Eye icon — shown when password is hidden (click to reveal)
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Red error banner — only shown when the login attempt failed */}
