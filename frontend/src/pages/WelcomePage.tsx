@@ -669,7 +669,7 @@ export default function WelcomePage() {
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50,
                        backgroundColor: C.brand, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="lx-px" style={{ height: 56,
+        <div className="lx-px lx-inner" style={{ height: 56,
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
@@ -753,7 +753,7 @@ export default function WelcomePage() {
 
       {/* ── HERO ────────────────────────────────────────────────────────────── */}
       <section className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '3rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        <div className="lx-inner" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
                       gap: '3rem', alignItems: 'center' }}>
           {/* Left: value proposition */}
           <div>
@@ -802,7 +802,7 @@ export default function WelcomePage() {
 
       {/* ── NARRATIVE SLIDESHOW ─────────────────────────────────────────────── */}
       <section id="narrative" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div>
+        <div className="lx-inner">
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             Why LexBase was built
@@ -825,7 +825,7 @@ export default function WelcomePage() {
 
       {/* ── HOW IT WORKS ────────────────────────────────────────────────────── */}
       <section id="how" className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div>
+        <div className="lx-inner">
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             The workflow
@@ -869,7 +869,7 @@ export default function WelcomePage() {
 
       {/* ── FEATURES ────────────────────────────────────────────────────────── */}
       <section id="features" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div>
+        <div className="lx-inner">
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             Capabilities
@@ -885,19 +885,28 @@ export default function WelcomePage() {
                 desc: 'Upload PDFs up to 25 MB, max 10 per firm. Text extracted page-by-page using PyMuPDF. Scanned (image-only) PDFs are not supported.',
                 tag: null },
               { icon: <Ico.search s={17} />, title: 'Hybrid search',
-                desc: 'Full-text (tsvector/GIN) + vector cosine (pgvector/HNSW), fused via Reciprocal Rank Fusion. Finds passages relevant to the meaning of the query.',
+                desc: 'Full-text (tsvector/GIN) + vector cosine (pgvector/HNSW), fused via Reciprocal Rank Fusion. Finds passages relevant to the meaning of the query, not just exact keywords.',
                 tag: null },
               { icon: <Ico.link s={17} />, title: 'Source-linked results',
                 desc: 'Every passage card shows source filename and page. Click to open the original PDF at the exact page for independent verification.',
                 tag: null },
               { icon: <Ico.scale s={17} />, title: 'AI summaries with citations',
-                desc: 'Grounded AI summary via Groq. Every factual claim includes an inline [N] citation. Uncited answers are suppressed. Requires a Groq API key.',
+                desc: 'Grounded AI summary via Groq, OpenRouter, or local Ollama. Every factual claim includes an inline [N] citation mapped to a retrieved passage.',
                 tag: 'Lawyer + Associate' },
               { icon: <Ico.users s={17} />, title: 'Role-based access',
-                desc: "Lawyer: manages firm, uploads, manages team. Associate: search and generate. Paralegal: search and view. Each firm's documents are isolated.",
+                desc: "Lawyer: manages firm, uploads, manages team. Associate: search and generate. Paralegal: search and view. Each firm's documents are fully isolated.",
                 tag: null },
               { icon: <Ico.file s={17} />, title: 'Research history',
                 desc: 'Every search session saved for 7 days — query, passage results, and AI answer. Return to a previous session without re-running the search.',
+                tag: null },
+              { icon: <Ico.search s={17} />, title: 'Query suggestions',
+                desc: 'The search bar surfaces query suggestions based on document content already indexed for your firm — helpful when you are not sure how to phrase a legal question.',
+                tag: null },
+              { icon: <Ico.scale s={17} />, title: 'Multi-provider LLM',
+                desc: 'Switch between Groq (fast cloud inference), OpenRouter (model variety), and Ollama (fully local, no data leaves your machine) without changing any code.',
+                tag: null },
+              { icon: <Ico.users s={17} />, title: 'Rate limiting',
+                desc: 'Per-IP rate limits on all API endpoints prevent accidental hammering and protect shared infrastructure in multi-user firm deployments.',
                 tag: null },
             ].map(({ icon, title, desc, tag }) => (
               <div key={title} style={{ backgroundColor: C.bg, border: `1px solid ${C.border}`,
@@ -920,7 +929,7 @@ export default function WelcomePage() {
 
       {/* ── TRUST disclaimer ────────────────────────────────────────────────── */}
       <section className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div>
+        <div className="lx-inner">
           <div style={{ backgroundColor: C.bgSurf, border: `1px solid ${C.border}`,
                         borderRadius: '1rem', padding: '2.25rem' }}>
             <div style={{ backgroundColor: C.accentBg, color: C.accent, width: 40, height: 40,
@@ -955,7 +964,7 @@ export default function WelcomePage() {
 
       {/* ── OPEN SOURCE ─────────────────────────────────────────────────────── */}
       <section id="oss" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        <div className="lx-inner" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
                       gap: '2.5rem', alignItems: 'center' }}>
           <div>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
@@ -1010,7 +1019,7 @@ export default function WelcomePage() {
 
       {/* ── FAQ ─────────────────────────────────────────────────────────────── */}
       <section id="faq" className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        <div className="lx-inner" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                       gap: '3rem', alignItems: 'start' }}>
           <div>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
@@ -1055,7 +1064,7 @@ export default function WelcomePage() {
 
       {/* ── FINAL CTA ───────────────────────────────────────────────────────── */}
       <section className="lx-px" style={{ backgroundColor: C.brand, paddingTop: '4.5rem', paddingBottom: '4.5rem' }}>
-        <div style={{ textAlign: 'center' }}>
+        <div className="lx-inner" style={{ textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.2rem)', fontWeight: 700, color: '#fff',
                        lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: '1rem' }}>
             Your legal documents already contain<br />the information you need.
@@ -1074,7 +1083,7 @@ export default function WelcomePage() {
       {/* ── Footer — personal credits live here only ────────────────────────── */}
       <footer className="lx-px" style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
                        paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap',
+        <div className="lx-inner" style={{ display: 'flex', flexWrap: 'wrap',
                       alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           {/* Brand */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
@@ -1135,6 +1144,19 @@ export default function WelcomePage() {
             padding-left:  2rem;
             padding-right: 2rem;
           }
+        }
+
+        /*
+          lx-inner — max readable content width, centred within lx-px gutter.
+          1200px cap: wide enough to use a large screen properly,
+          narrow enough that prose lines stay readable.
+          The header bar uses this too so the logo/nav align with page content.
+        */
+        .lx-inner {
+          max-width: 1200px;
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
         }
 
         /* Slideshow: beat sidebar left + content right on md+ */
