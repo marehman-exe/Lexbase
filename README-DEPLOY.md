@@ -213,6 +213,9 @@ For a demo that may receive sporadic traffic, **Railway free tier** is the best 
 | `OPENROUTER_API_KEY` | — | Fallback LLM key |
 | `SUPER_ADMIN_EMAIL` | ✅ | Admin account email |
 | `SUPER_ADMIN_PASSWORD` | ✅ | Admin account password |
+| `MAX_DOCS_PER_FIRM` | — | Max documents per firm (default: `10`) — raise for larger pilots |
+| `MAX_FILE_SIZE_MB` | — | Max upload size in MB (default: `25`) |
+| `MAX_PAGES_PER_DOC` | — | Max pages per document (default: `800`) |
 
 ### Frontend (Vercel)
 
