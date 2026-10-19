@@ -2,8 +2,6 @@
 // Copy lives in CONTENT object at the top. Components below are typed and self-contained.
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTENT — single source of truth for all copy
@@ -24,9 +22,9 @@ const CONTENT = {
     h1a: 'Find the passage.',
     h1b: 'Trace it to its source.',
     body: 'LexBase searches your firm\'s PDF documents, ranks the most relevant passages, and links every result directly to the page it came from. No guessing. No unsupported answers.',
-    cta1: 'Request access',
+    cta1: 'View on GitHub',
     cta2: 'See how it works',
-    ctaNote: 'Accounts are created by your firm administrator. There is no public sign-up.',
+    ctaNote: 'This is a live demo. Click "View on GitHub" to explore the source or request access.',
     disclaimer: 'A research aid, not legal advice. Always verify against the source document.',
   },
   trust: [
@@ -139,7 +137,7 @@ const CONTENT = {
   cta: {
     heading: 'Your documents already contain the answer.',
     body: 'LexBase helps you find it, trace it to its source, and spend your time on analysis — not the search that precedes it.',
-    cta1: 'Request access',
+    cta1: 'Request access on GitHub',
     cta2: 'View the repository',
   },
   footer: {
@@ -913,8 +911,6 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 // PAGE ROOT
 // ─────────────────────────────────────────────────────────────────────────────
 export default function WelcomePage() {
-  const navigate               = useNavigate()
-  const { user, initialising } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
@@ -922,12 +918,6 @@ export default function WelcomePage() {
     window.addEventListener('resize', h)
     return () => window.removeEventListener('resize', h)
   }, [])
-
-  useEffect(() => {
-    if (!initialising && user) navigate('/dashboard', { replace: true })
-  }, [initialising, user, navigate])
-
-  const goLogin = () => navigate('/login')
 
   const trustIcons: Record<string, React.ReactNode> = {
     lock:   <IconLock s={20} />,
@@ -969,15 +959,16 @@ export default function WelcomePage() {
                 {label}
               </a>
             ))}
-            <button type="button" onClick={goLogin}
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
                     style={{ marginLeft: '0.375rem', backgroundColor: C.accent, color: '#fff',
                              border: 'none', borderRadius: '0.5rem', padding: '0.4rem 0.875rem',
                              fontSize: '0.83rem', fontWeight: 600, cursor: 'pointer',
-                             transition: 'background-color 0.15s', fontFamily: 'inherit' }}
+                             transition: 'background-color 0.15s', fontFamily: 'inherit',
+                             textDecoration: 'none', display: 'inline-block' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = C.accentHov }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = C.accent }}>
-              Log in
-            </button>
+              Request access
+            </a>
           </nav>
 
           {/* Mobile burger */}
@@ -1003,12 +994,14 @@ export default function WelcomePage() {
                 {label}
               </a>
             ))}
-            <button type="button" onClick={() => { setMenuOpen(false); goLogin() }}
-                    style={{ marginTop: '0.875rem', width: '100%', backgroundColor: C.accent,
-                             color: '#fff', border: 'none', borderRadius: '0.625rem', padding: '0.75rem',
-                             fontSize: '0.92rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
-              Log in
-            </button>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
+                    onClick={() => setMenuOpen(false)}
+                    style={{ marginTop: '0.875rem', display: 'block', textAlign: 'center',
+                             backgroundColor: C.accent, color: '#fff', borderRadius: '0.625rem',
+                             padding: '0.75rem', fontSize: '0.92rem', fontWeight: 600,
+                             cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'none' }}>
+              Request access
+            </a>
           </div>
         )}
       </header>
@@ -1039,7 +1032,7 @@ export default function WelcomePage() {
             </p>
 
             <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', marginBottom: '0.875rem' }}>
-              <BtnPrimary onClick={goLogin} size="lg">{CONTENT.hero.cta1}</BtnPrimary>
+              <BtnPrimary href={GITHUB_URL} size="lg">{CONTENT.hero.cta1}</BtnPrimary>
               <BtnGhost href="#how" size="lg">{CONTENT.hero.cta2}</BtnGhost>
             </div>
 
@@ -1106,7 +1099,7 @@ export default function WelcomePage() {
                       maxWidth: 560, margin: '0 0 2.5rem' }}>
             {CONTENT.why.body}
           </p>
-          <NarrativeSlideshow onAccess={goLogin} />
+          <NarrativeSlideshow onAccess={() => window.open(GITHUB_URL, '_blank', 'noopener,noreferrer')} />
         </div>
       </section>
 
@@ -1275,7 +1268,7 @@ export default function WelcomePage() {
             {CONTENT.cta.body}
           </p>
           <div style={{ display: 'flex', gap: '0.625rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <BtnPrimary onClick={goLogin} size="lg">{CONTENT.cta.cta1}</BtnPrimary>
+            <BtnPrimary href={GITHUB_URL} size="lg">{CONTENT.cta.cta1}</BtnPrimary>
             <BtnGhost href={GITHUB_URL} light size="lg">
               <IconGithub s={16} /> {CONTENT.cta.cta2}
             </BtnGhost>
