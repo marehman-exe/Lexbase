@@ -6,11 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 const GITHUB_URL  = 'https://github.com/marehman-exe/Lexbase'
-// Max content width — applied consistently to every section container
-const MAX_W       = '960px'
 // Horizontal padding is applied via the CSS class lx-px (defined in the <style> block):
 //   mobile ≥0px   : 1.5rem (24px) = Tailwind p-6
 //   desktop ≥768px: 2rem   (32px) = Tailwind p-8
+// No max-width — content fills edge-to-edge like the dashboard.
 
 // ── Icons (same stroke style as Sidebar.tsx) ─────────────────────────────────
 const Ico = {
@@ -670,7 +669,7 @@ export default function WelcomePage() {
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50,
                        backgroundColor: C.brand, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="lx-px" style={{ maxWidth: MAX_W, margin: '0 auto', height: 56,
+        <div className="lx-px" style={{ height: 56,
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
@@ -754,8 +753,7 @@ export default function WelcomePage() {
 
       {/* ── HERO ────────────────────────────────────────────────────────────── */}
       <section className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '3rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto',
-                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '3rem', alignItems: 'center' }}>
           {/* Left: value proposition */}
           <div>
@@ -804,7 +802,7 @@ export default function WelcomePage() {
 
       {/* ── NARRATIVE SLIDESHOW ─────────────────────────────────────────────── */}
       <section id="narrative" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
+        <div>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             Why LexBase was built
@@ -827,7 +825,7 @@ export default function WelcomePage() {
 
       {/* ── HOW IT WORKS ────────────────────────────────────────────────────── */}
       <section id="how" className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
+        <div>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             The workflow
@@ -871,7 +869,7 @@ export default function WelcomePage() {
 
       {/* ── FEATURES ────────────────────────────────────────────────────────── */}
       <section id="features" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
+        <div>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
             Capabilities
@@ -922,7 +920,7 @@ export default function WelcomePage() {
 
       {/* ── TRUST disclaimer ────────────────────────────────────────────────── */}
       <section className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
+        <div>
           <div style={{ backgroundColor: C.bgSurf, border: `1px solid ${C.border}`,
                         borderRadius: '1rem', padding: '2.25rem' }}>
             <div style={{ backgroundColor: C.accentBg, color: C.accent, width: 40, height: 40,
@@ -957,8 +955,7 @@ export default function WelcomePage() {
 
       {/* ── OPEN SOURCE ─────────────────────────────────────────────────────── */}
       <section id="oss" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto',
-                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '2.5rem', alignItems: 'center' }}>
           <div>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
@@ -1013,8 +1010,7 @@ export default function WelcomePage() {
 
       {/* ── FAQ ─────────────────────────────────────────────────────────────── */}
       <section id="faq" className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto',
-                      display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '3rem', alignItems: 'start' }}>
           <div>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
@@ -1059,7 +1055,7 @@ export default function WelcomePage() {
 
       {/* ── FINAL CTA ───────────────────────────────────────────────────────── */}
       <section className="lx-px" style={{ backgroundColor: C.brand, paddingTop: '4.5rem', paddingBottom: '4.5rem' }}>
-        <div style={{ maxWidth: 660, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.2rem)', fontWeight: 700, color: '#fff',
                        lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: '1rem' }}>
             Your legal documents already contain<br />the information you need.
@@ -1078,7 +1074,7 @@ export default function WelcomePage() {
       {/* ── Footer — personal credits live here only ────────────────────────── */}
       <footer className="lx-px" style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
                        paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto', display: 'flex', flexWrap: 'wrap',
+        <div style={{ display: 'flex', flexWrap: 'wrap',
                       alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           {/* Brand */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
