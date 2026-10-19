@@ -7,9 +7,10 @@ import { useAuth } from '../context/AuthContext'
 
 const GITHUB_URL  = 'https://github.com/marehman-exe/Lexbase'
 // Max content width — applied consistently to every section container
-const MAX_W       = '920px'
-// Consistent horizontal page padding — applied to every section
-const PX          = '1.5rem'
+const MAX_W       = '960px'
+// Horizontal padding is applied via the CSS class lx-px (defined in the <style> block):
+//   mobile ≥0px   : 1.5rem (24px) = Tailwind p-6
+//   desktop ≥768px: 2rem   (32px) = Tailwind p-8
 
 // ── Icons (same stroke style as Sidebar.tsx) ─────────────────────────────────
 const Ico = {
@@ -669,7 +670,7 @@ export default function WelcomePage() {
       {/* ── Header ──────────────────────────────────────────────────────────── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 50,
                        backgroundColor: C.brand, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div style={{ maxWidth: MAX_W, margin: '0 auto', padding: `0 ${PX}`, height: 56,
+        <div className="lx-px" style={{ maxWidth: MAX_W, margin: '0 auto', height: 56,
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
@@ -723,8 +724,8 @@ export default function WelcomePage() {
 
         {/* Mobile drawer */}
         {menuOpen && (
-          <div style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
-                        padding: `1rem ${PX} 1.5rem` }}>
+          <div className="lx-px" style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
+                        paddingTop: '1rem', paddingBottom: '1.5rem' }}>
             {[
               { t: 'How It Works', h: '#how'      },
               { t: 'Features',     h: '#features' },
@@ -752,7 +753,7 @@ export default function WelcomePage() {
       </header>
 
       {/* ── HERO ────────────────────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: C.bg, padding: `4.5rem ${PX} 3rem` }}>
+      <section className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '3rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto',
                       display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '3rem', alignItems: 'center' }}>
@@ -802,7 +803,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── NARRATIVE SLIDESHOW ─────────────────────────────────────────────── */}
-      <section id="narrative" style={{ backgroundColor: C.bgSurf, padding: `5rem ${PX}` }}>
+      <section id="narrative" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
@@ -825,7 +826,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── HOW IT WORKS ────────────────────────────────────────────────────── */}
-      <section id="how" style={{ backgroundColor: C.bg, padding: `5rem ${PX}` }}>
+      <section id="how" className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
@@ -869,7 +870,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── FEATURES ────────────────────────────────────────────────────────── */}
-      <section id="features" style={{ backgroundColor: C.bgSurf, padding: `5rem ${PX}` }}>
+      <section id="features" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent,
                       letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.625rem' }}>
@@ -920,7 +921,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── TRUST disclaimer ────────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: C.bg, padding: `5rem ${PX}` }}>
+      <section className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto' }}>
           <div style={{ backgroundColor: C.bgSurf, border: `1px solid ${C.border}`,
                         borderRadius: '1rem', padding: '2.25rem' }}>
@@ -955,7 +956,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── OPEN SOURCE ─────────────────────────────────────────────────────── */}
-      <section id="oss" style={{ backgroundColor: C.bgSurf, padding: `5rem ${PX}` }}>
+      <section id="oss" className="lx-px" style={{ backgroundColor: C.bgSurf, paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto',
                       display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '2.5rem', alignItems: 'center' }}>
@@ -1011,7 +1012,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── FAQ ─────────────────────────────────────────────────────────────── */}
-      <section id="faq" style={{ backgroundColor: C.bg, padding: `5rem ${PX}` }}>
+      <section id="faq" className="lx-px" style={{ backgroundColor: C.bg, paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto',
                       display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
                       gap: '3rem', alignItems: 'start' }}>
@@ -1057,7 +1058,7 @@ export default function WelcomePage() {
       <Divider />
 
       {/* ── FINAL CTA ───────────────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: C.brand, padding: `5.5rem ${PX}` }}>
+      <section className="lx-px" style={{ backgroundColor: C.brand, paddingTop: '4.5rem', paddingBottom: '4.5rem' }}>
         <div style={{ maxWidth: 660, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.2rem)', fontWeight: 700, color: '#fff',
                        lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: '1rem' }}>
@@ -1075,8 +1076,8 @@ export default function WelcomePage() {
       </section>
 
       {/* ── Footer — personal credits live here only ────────────────────────── */}
-      <footer style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
-                       padding: `1.75rem ${PX}` }}>
+      <footer className="lx-px" style={{ backgroundColor: C.brand, borderTop: '1px solid rgba(255,255,255,0.08)',
+                       paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
         <div style={{ maxWidth: MAX_W, margin: '0 auto', display: 'flex', flexWrap: 'wrap',
                       alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
           {/* Brand */}
@@ -1122,6 +1123,24 @@ export default function WelcomePage() {
         .lx-nav-desk { display: flex !important; }
         .lx-nav-mob  { display: none  !important; }
 
+        /*
+          lx-px — responsive horizontal padding matching the app's dashboard rhythm:
+            mobile  : 1.5rem  (24px) = Tailwind p-6
+            ≥768px  : 2rem    (32px) = Tailwind p-8
+          Applied to every section, the header content div, the mobile drawer,
+          and the footer so all horizontal gutters are identical across the page.
+        */
+        .lx-px {
+          padding-left:  1.5rem;
+          padding-right: 1.5rem;
+        }
+        @media (min-width: 768px) {
+          .lx-px {
+            padding-left:  2rem;
+            padding-right: 2rem;
+          }
+        }
+
         /* Slideshow: beat sidebar left + content right on md+ */
         .lx-slideshow-grid { grid-template-columns: 190px 1fr; }
         .lx-beat-sidebar   { display: flex !important; }
@@ -1147,9 +1166,6 @@ export default function WelcomePage() {
           outline: 2px solid #386641 !important;
           outline-offset: 2px;
         }
-
-        /* Hidden slideshow content must not receive focus */
-        .lx-beat-sidebar button[aria-pressed="false"] { }
 
         /* Honour reduced-motion: strip all transitions and animations */
         @media (prefers-reduced-motion: reduce) {
