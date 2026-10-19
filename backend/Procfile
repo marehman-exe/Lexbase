@@ -1,0 +1,4 @@
+# Backend start command for Railway / Render / any PaaS
+# Runs Alembic migrations first, then starts the API server.
+# PORT is injected by the platform (Railway / Render set it automatically).
+web: alembic upgrade head && python seed.py && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
